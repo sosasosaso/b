@@ -1,0 +1,138 @@
+import java.util.Scanner;
+
+class Task {
+    private int taskID;
+    private String description;
+    private boolean completed;
+    private String dueDate;
+
+    public Task(int taskID, String description, String dueDate) {
+        this.taskID = taskID;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.completed = false;
+    }
+
+    public int getTaskID() {
+        return taskID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public void markCompleted() {
+        this.completed = true;
+    }
+
+    public String toString() {
+        return
+                "taskID: " + taskID +
+                        ", description: '" + description + '\'' +
+                        ", dueDate: '" + dueDate + '\'' +
+                        ", completed: " + completed;
+    }
+}
+
+class TaskManager {
+    private Task[] tasks;
+    private int size;
+
+    public TaskManager(int capacity) {
+        tasks = new Task[capacity];
+        size = 0;
+    }
+
+    public void addTask(Task task) {
+        if (size < tasks.length) {
+            tasks[size++] = task;
+        } else {
+            System.out.println("Cannot add more tasks.");
+        }
+    }
+
+    public void markTaskAsCompleted(int taskID) {
+        for (Task task : tasks) {
+            if (task != null && task.getTaskID() == taskID) {
+                task.markCompleted();
+                System.out.println("Task " + taskID + " is completed.");
+                return;
+            }
+        }
+        System.out.println("Task " + taskID + " not found.");
+    }
+
+    public void viewAllTasks() {
+        for (Task task : tasks) {
+            if (task != null) {
+                System.out.println(task);
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        TaskManager taskManager = new TaskManager(10);
+
+        while (true) {
+            System.out.println("Choose an option:");
+            System.out.println("1. Add Task");
+            System.out.println("2. Mark Task as Completed");
+            System.out.println("3. View All Tasks");
+            System.out.println("4. Exit");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter task ID:");
+                    int taskID = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Enter task description:");
+                    String description = scanner.nextLine();
+                    System.out.println("Enter due date:");
+                    String dueDate = scanner.nextLine();
+                    Task newTask = new Task(taskID, description, dueDate);
+                    taskManager.addTask(newTask);
+                    break;
+                case 2:
+                    System.out.println("Enter task ID to mark as completed:");
+                    int taskToMark = scanner.nextInt();
+                    taskManager.markTaskAsCompleted(taskToMark);
+                    break;
+                case 3:
+                    System.out.println("All Tasks:");
+                    taskManager.viewAllTasks();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please choose again.");
+            }
+        }
+    }
+}
